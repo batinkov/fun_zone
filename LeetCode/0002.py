@@ -35,27 +35,24 @@ class ListNode:
 class Solution:
     def addTwoNumbers(self, l1: Optional[ListNode], l2: Optional[ListNode]) -> Optional[ListNode]:
         n1, n2 = l1, l2
-        curr, carry = 0, 0
+        carry = 0
         result = ListNode(0)  # sentinel; real head is result.next
         tail = result
 
         # `or carry` keeps the loop alive for the trailing overflow digit
         # (e.g. 999 + 1 → 1000, where the result is longer than either input)
         while n1 or n2 or carry:
+            curr = carry
             if n1:
                 curr += n1.val
                 n1 = n1.next
             if n2:
                 curr += n2.val
                 n2 = n2.next
-            if carry:
-                curr += carry
 
-            tail.next = ListNode(curr % 10)
+            carry, digit = divmod(curr, 10)
+            tail.next = ListNode(digit)
             tail = tail.next
-
-            carry = curr // 10
-            curr = 0
 
         return result.next
 
